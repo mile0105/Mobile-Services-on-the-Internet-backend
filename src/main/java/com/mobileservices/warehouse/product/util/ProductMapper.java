@@ -9,12 +9,13 @@ public class ProductMapper {
 
     private final int STARTING_QUANTITY = 0;
 
-    public Product mapToDbModel(ProductApi productApi) {
+    public Product mapToDbModel(ProductApi productApi, Long id) {
         return Product.builder()
                 .manufacturerName(productApi.getManufacturerName())
                 .modelName(productApi.getModelName())
                 .price(productApi.getPrice())
                 .quantity(STARTING_QUANTITY)
+                .id(id)
                 .build();
     }
 }
