@@ -14,39 +14,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductMapper productMapper;
-    private final ProductRepository productRepository;
+  private final ProductMapper productMapper;
+  private final ProductRepository productRepository;
 
-    public List<Product> listAllProducts() {
+  public List<Product> listAllProducts() {
 
-        List<Product> products = new ArrayList<>();
-        productRepository.findAll().forEach(products::add);
-        return products;
-    }
+    List<Product> products = new ArrayList<>();
+    productRepository.findAll().forEach(products::add);
+    return products;
+  }
 
-    public String addProduct(ProductApi productApi) {
-        Product convertedProduct = productMapper.mapToDbModel(productApi, null);
+  public String addProduct(ProductApi productApi) {
+    Product convertedProduct = productMapper.mapToDbModel(productApi, null);
 
-        Product savedProduct = productRepository.save(convertedProduct);
+    Product savedProduct = productRepository.save(convertedProduct);
 
-        return String.valueOf(savedProduct.getId());
-    }
+    return String.valueOf(savedProduct.getId());
+  }
 
-    public Product changeQuantity(Long quantity, Long productId) {
-        Product p = Product.builder().build();
-        //todo implement with repository
+  public Product changeQuantity(Long quantity, Long productId) {
+    Product p = Product.builder().build();
+    //todo implement with repository
 
-        return p;
-    }
+    return p;
+  }
 
-    public Product editProduct(Long productId, ProductApi editedProduct) {
+  public Product editProduct(Long productId, ProductApi editedProduct) {
 
-        Product product = productMapper.mapToDbModel(editedProduct, productId);
-        return productRepository.save(product);
-    }
+    Product product = productMapper.mapToDbModel(editedProduct, productId);
+    return productRepository.save(product);
+  }
 
-    public void deleteProduct(Long productId) {
-        productRepository.deleteById(productId);
-    }
+  public void deleteProduct(Long productId) {
+    productRepository.deleteById(productId);
+  }
 
 }
