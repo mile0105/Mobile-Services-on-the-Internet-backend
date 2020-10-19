@@ -16,7 +16,7 @@ public class UserController {
 
   private final UserService userService;
 
-  @PostMapping
+  @PostMapping("/register")
   public ResponseEntity<Void> register(@RequestBody UserApi userApi) {
 
     userService.register(userApi);
