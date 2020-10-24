@@ -1,8 +1,10 @@
 package com.mobileservices.warehouse.security;
 
+import com.mobileservices.warehouse.user.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,13 +16,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, proxyTargetClass = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
 
   private final UserDetailsService userDetailsService;
 
@@ -48,13 +50,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     http
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       .and()
+      .anonymous()
+      .and()
       .authorizeRequests()
       .antMatchers("/api/v1/users/register**").permitAll()
-      .antMatchers("/oauth/token").permitAll()
-      .antMatchers("/api/v1/**").authenticated()
-//      .antMatchers("/api/glee/**").hasAnyAuthority("ADMIN", "USER")
-//      .antMatchers("/api/users/**").hasAuthority("ADMIN")
-//      .antMatchers("/api/**").authenticated()
-      .anyRequest().authenticated();
+      .antMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasAuthority(Role.WAREHOUSE_MANAGER.getName())
+      .anyRequest().authenticated()
+      .and().oauth2Login();
+  }
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring().mvcMatchers("/api/v1/users/register**");
   }
 }

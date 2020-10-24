@@ -5,6 +5,7 @@ import com.mobileservices.warehouse.product.model.ProductApi;
 import com.mobileservices.warehouse.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,44 +23,44 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
-    //todo implement fully
+  private final ProductService productService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Product>> getAllProducts() {
-        final List<Product> products = productService.listAllProducts();
-        return ResponseEntity.ok(products);
-    }
+  @GetMapping
+  public ResponseEntity<List<Product>> getAllProducts() {
+    final List<Product> products = productService.listAllProducts();
+    return ResponseEntity.ok(products);
+  }
 
-    @PostMapping("/")
-    public ResponseEntity<Void> addProduct(@RequestBody ProductApi productApi) {
-        final String productId = productService.addProduct(productApi);
-        return ResponseEntity.created(URI.create(productId)).build();
-    }
+  @PostMapping
+  public ResponseEntity<Void> addProduct(@RequestBody ProductApi productApi) {
+    final String productId = productService.addProduct(productApi);
+    return ResponseEntity.created(URI.create(productId)).build();
+  }
 
-    @PutMapping("/{id}/increaseQuantity")
-    public ResponseEntity<Product> increaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
+  @PutMapping("/{id}/increaseQuantity")
+  public ResponseEntity<Void> increaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
 
-        Product product = productService.changeQuantity(quantity, productId);
-        return ResponseEntity.ok(product);
-    }
+    productService.changeQuantity(quantity, productId);
+    return ResponseEntity.ok().build();
+  }
 
 
-    @PutMapping("/{id}/decreaseQuantity")
-    public ResponseEntity<Product> decreaseQuantity(@PathVariable("id") long productId, @RequestBody long quantity) {
-        Product product = productService.changeQuantity(-quantity, productId);
-        return ResponseEntity.ok(product);
-    }
+  @PutMapping("/{id}/decreaseQuantity")
+  public ResponseEntity<Void> decreaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
+    productService.changeQuantity(-quantity, productId);
+    return ResponseEntity.ok().build();
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") long productId) {
-        productService.deleteProduct(productId);
-        return ResponseEntity.ok().build();
-    }
+  @DeleteMapping("/{id}")
+  @PreAuthorize("hasAuthority('MANAGER')")
+  public ResponseEntity<Void> deleteProduct(@PathVariable("id") long productId) {
+    productService.deleteProduct(productId);
+    return ResponseEntity.ok().build();
+  }
 
-    @PutMapping("/{id}/edit")
-    public ResponseEntity<Product> editProduct(@PathVariable("id") Long productId, ProductApi editedProduct) {
-        Product product = productService.editProduct(productId, editedProduct);
-        return ResponseEntity.ok(product);
-    }
+  @PutMapping("/{id}")
+  public ResponseEntity<Product> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApi editedProduct) {
+    Product product = productService.editProduct(productId, editedProduct);
+    return ResponseEntity.ok(product);
+  }
 }

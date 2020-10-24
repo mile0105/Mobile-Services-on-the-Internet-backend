@@ -4,3 +4,12 @@ spring:
     username: czkqnxhvvpiqic
     password: 72a881822b780da7152f8e75f84655260a8c07dd7c59c51b2e5890e39bbee997
     driver-class-name: org.postgresql.Driver
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 943009418326-10ps7uu4pf916v6l9fdlstui1101nom2.apps.googleusercontent.com
+            client-secret: QwmgCZfODlsBLC2QVK1oruR-

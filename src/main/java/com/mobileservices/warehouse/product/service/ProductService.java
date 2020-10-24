@@ -17,6 +17,8 @@ public class ProductService {
   private final ProductMapper productMapper;
   private final ProductRepository productRepository;
 
+  private final int STARTING_QUANTITY = 0;
+
   public List<Product> listAllProducts() {
 
     List<Product> products = new ArrayList<>();
@@ -25,23 +27,30 @@ public class ProductService {
   }
 
   public String addProduct(ProductApi productApi) {
-    Product convertedProduct = productMapper.mapToDbModel(productApi, null);
+    Product convertedProduct = productMapper.mapToDbModel(productApi, null, STARTING_QUANTITY);
 
     Product savedProduct = productRepository.save(convertedProduct);
 
     return String.valueOf(savedProduct.getId());
   }
 
-  public Product changeQuantity(Long quantity, Long productId) {
-    Product p = Product.builder().build();
-    //todo implement with repository
+  public void changeQuantity(Long quantity, Long productId) {
 
-    return p;
+    Product oldProduct = findByIdOrThrow(productId);
+
+    int newQuantity = quantity.intValue() + oldProduct.getQuantity();
+
+    if (newQuantity < 0) {
+      throw new IllegalStateException("Quantity must not be less than 0");
+    }
+    productRepository.updateProductQuantity(productId, newQuantity);
   }
 
   public Product editProduct(Long productId, ProductApi editedProduct) {
 
-    Product product = productMapper.mapToDbModel(editedProduct, productId);
+    Product oldProduct = findByIdOrThrow(productId);
+
+    Product product = productMapper.mapToDbModel(editedProduct, productId, oldProduct.getQuantity());
     return productRepository.save(product);
   }
 
@@ -49,4 +58,7 @@ public class ProductService {
     productRepository.deleteById(productId);
   }
 
+  private Product findByIdOrThrow(long productId) {
+    return productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product not found"));
+  }
 }
