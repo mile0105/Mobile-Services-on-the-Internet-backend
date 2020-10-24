@@ -1,5 +1,7 @@
 package com.mobileservices.warehouse.product.service;
 
+import com.mobileservices.warehouse.error.exceptions.BadRequestException;
+import com.mobileservices.warehouse.error.exceptions.NotFoundException;
 import com.mobileservices.warehouse.product.model.Product;
 import com.mobileservices.warehouse.product.model.ProductApi;
 import com.mobileservices.warehouse.product.repository.ProductRepository;
@@ -41,7 +43,7 @@ public class ProductService {
     int newQuantity = quantity.intValue() + oldProduct.getQuantity();
 
     if (newQuantity < 0) {
-      throw new IllegalStateException("Quantity must not be less than 0");
+      throw new BadRequestException("Quantity must not be less than 0");
     }
     productRepository.updateProductQuantity(productId, newQuantity);
   }
@@ -55,10 +57,13 @@ public class ProductService {
   }
 
   public void deleteProduct(Long productId) {
+
+    findByIdOrThrow(productId);
+
     productRepository.deleteById(productId);
   }
 
   private Product findByIdOrThrow(long productId) {
-    return productRepository.findById(productId).orElseThrow(() -> new IllegalStateException("Product not found"));
+    return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
   }
 }
