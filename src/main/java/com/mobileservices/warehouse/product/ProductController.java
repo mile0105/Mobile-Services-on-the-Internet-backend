@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -32,23 +31,22 @@ public class ProductController {
   }
 
   @PostMapping
-  public ResponseEntity<Void> addProduct(@RequestBody ProductApi productApi) {
-    final String productId = productService.addProduct(productApi);
-    return ResponseEntity.created(URI.create(productId)).build();
+  public ResponseEntity<Product> addProduct(@RequestBody ProductApi productApi) {
+    final Product product = productService.addProduct(productApi);
+    return ResponseEntity.ok(product);
   }
 
   @PutMapping("/{id}/increaseQuantity")
-  public ResponseEntity<Void> increaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
-
-    productService.changeQuantity(quantity, productId);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<Product> increaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
+    final Product product = productService.changeQuantity(quantity, productId);
+    return ResponseEntity.ok(product);
   }
 
 
   @PutMapping("/{id}/decreaseQuantity")
-  public ResponseEntity<Void> decreaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
-    productService.changeQuantity(-quantity, productId);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<Product> decreaseQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
+    final Product product = productService.changeQuantity(-quantity, productId);
+    return ResponseEntity.ok(product);
   }
 
   @DeleteMapping("/{id}")
