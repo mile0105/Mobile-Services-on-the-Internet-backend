@@ -21,7 +21,7 @@ import java.util.List;
 public class CorsFilter extends GenericFilterBean {
 
   private final String DEFAULT_ALLOWED_ORIGIN = "*";
-  private List<String> allowedOrigins = Arrays.asList(DEFAULT_ALLOWED_ORIGIN, "http://localhost:19006");
+  private List<String> allowedOrigins = Arrays.asList(DEFAULT_ALLOWED_ORIGIN, "http://localhost:19006", "http://localhost:**");
 
   @Override
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
