@@ -21,7 +21,7 @@ import java.util.List;
 public class CorsFilter extends GenericFilterBean {
 
   private final String DEFAULT_ALLOWED_ORIGIN = "*";
-  private List<String> allowedOrigins = Arrays.asList(DEFAULT_ALLOWED_ORIGIN, "http://localhost:19006", "http://localhost:**");
+  private List<String> allowedOrigins = Arrays.asList(DEFAULT_ALLOWED_ORIGIN, "http://localhost:19006", "exp://153.19.216.71:19000");
 
   @Override
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -30,7 +30,7 @@ public class CorsFilter extends GenericFilterBean {
     String origin = request.getHeader("Origin");
     String allowedOriginResponse = (allowedOrigins.contains(origin))? origin : DEFAULT_ALLOWED_ORIGIN;
     response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+    response.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE, PATCH");
     response.setHeader("Access-Control-Max-Age", "3600");
     response.setHeader("Access-Control-Allow-Headers", "Authorization");
     response.setHeader("Access-Control-Allow-Credentials", "true");

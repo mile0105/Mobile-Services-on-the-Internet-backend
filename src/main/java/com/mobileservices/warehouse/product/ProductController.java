@@ -39,8 +39,8 @@ public class ProductController {
 
   @PatchMapping("/{id}/quantity")
   public ResponseEntity<Product> changeQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
-    final Product product = productService.changeQuantity(quantity, productId);
-    return ResponseEntity.ok(product);
+    productService.changeQuantity(quantity, productId);
+    return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{id}")

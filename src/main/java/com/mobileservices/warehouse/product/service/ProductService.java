@@ -36,7 +36,7 @@ public class ProductService {
     return savedProduct;
   }
 
-  public Product changeQuantity(Long quantity, Long productId) {
+  public void changeQuantity(Long quantity, Long productId) {
 
     Product oldProduct = findByIdOrThrow(productId);
 
@@ -45,8 +45,6 @@ public class ProductService {
     if (newQuantity < 0) {
       throw new BadRequestException("Quantity must not be less than 0");
     }
-    Product updatedProduct = productRepository.updateProductQuantity(productId, newQuantity);
-    return updatedProduct;
   }
 
   public Product editProduct(Long productId, ProductApi editedProduct) {
