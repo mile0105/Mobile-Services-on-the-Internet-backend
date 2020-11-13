@@ -45,6 +45,7 @@ public class ProductService {
     if (newQuantity < 0) {
       throw new BadRequestException("Quantity must not be less than 0");
     }
+    productRepository.updateProductQuantity(productId, newQuantity);
   }
 
   public Product editProduct(Long productId, ProductApi editedProduct) {

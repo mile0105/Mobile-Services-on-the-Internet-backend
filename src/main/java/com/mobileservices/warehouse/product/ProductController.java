@@ -3,7 +3,9 @@ package com.mobileservices.warehouse.product;
 import com.mobileservices.warehouse.product.model.Product;
 import com.mobileservices.warehouse.product.model.ProductApi;
 import com.mobileservices.warehouse.product.service.ProductService;
+import com.mobileservices.warehouse.util.models.EmptyResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,17 +39,17 @@ public class ProductController {
     return ResponseEntity.ok(product);
   }
 
-  @PatchMapping("/{id}/quantity")
-  public ResponseEntity<Product> changeQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
+  @PatchMapping(value = "/{id}/quantity")
+  public ResponseEntity<EmptyResponse> changeQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
     productService.changeQuantity(quantity, productId);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new EmptyResponse());
   }
 
   @DeleteMapping("/{id}")
   @PreAuthorize("hasAuthority('MANAGER')")
-  public ResponseEntity<Void> deleteProduct(@PathVariable("id") long productId) {
+  public ResponseEntity<EmptyResponse> deleteProduct(@PathVariable("id") long productId) {
     productService.deleteProduct(productId);
-    return ResponseEntity.ok().build();
+    return ResponseEntity.ok(new EmptyResponse());
   }
 
   @PutMapping("/{id}")
