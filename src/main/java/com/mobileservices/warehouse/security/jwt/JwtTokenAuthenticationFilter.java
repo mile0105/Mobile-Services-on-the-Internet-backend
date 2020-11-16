@@ -1,6 +1,5 @@
 package com.mobileservices.warehouse.security.jwt;
 
-import com.mobileservices.warehouse.user.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

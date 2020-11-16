@@ -1,7 +1,6 @@
 package com.mobileservices.warehouse.user.service;
 
 import com.google.api.client.auth.openidconnect.IdToken;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mobileservices.warehouse.error.exceptions.BadRequestException;
 import com.mobileservices.warehouse.security.jwt.CustomJwtToken;
@@ -9,8 +8,6 @@ import com.mobileservices.warehouse.security.jwt.JwtUtils;
 import com.mobileservices.warehouse.user.model.User;
 import com.mobileservices.warehouse.user.model.UserApi;
 import com.mobileservices.warehouse.user.repository.UserRepository;
-import io.jsonwebtoken.Jwt;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
