@@ -9,6 +9,7 @@ import com.mobileservices.warehouse.product.util.ProductMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +52,12 @@ public class ProductService {
   public Product editProduct(Long productId, ProductApi editedProduct) {
 
     Product oldProduct = findByIdOrThrow(productId);
+
+    LocalDateTime editTimeStamp = editedProduct.getLastEditTimeStamp();
+
+    if (editTimeStamp != null && oldProduct.getLastUpdated().isAfter(editTimeStamp)) {
+      return oldProduct;
+    }
 
     Product product = productMapper.mapToDbModel(editedProduct, productId, oldProduct.getQuantity());
     return productRepository.save(product);
