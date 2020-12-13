@@ -5,6 +5,7 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 import com.mobileservices.warehouse.error.exceptions.BadRequestException;
 import com.mobileservices.warehouse.security.jwt.CustomJwtToken;
 import com.mobileservices.warehouse.security.jwt.JwtUtils;
+import com.mobileservices.warehouse.user.model.Role;
 import com.mobileservices.warehouse.user.model.User;
 import com.mobileservices.warehouse.user.model.UserApi;
 import com.mobileservices.warehouse.user.repository.UserRepository;
@@ -41,12 +42,16 @@ public class UserService {
     Authentication authentication = authenticationManager.authenticate(
       new UsernamePasswordAuthenticationToken(username, password));
 
+    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
     String accessToken = jwtUtils.generateAccessToken(authentication);
     String refreshToken = jwtUtils.generateRefreshToken(authentication);
+    boolean isManager = checkIfUserIsManager(userDetails);
 
     return CustomJwtToken.builder()
       .accessToken(accessToken)
       .refreshToken(refreshToken)
+      .hasDeletePermission(isManager)
       .build();
   }
 
@@ -59,8 +64,13 @@ public class UserService {
 
       String accessToken = jwtUtils.generateAccessToken(userDetails);
       String refreshToken = jwtUtils.generateRefreshToken(userDetails);
+      boolean isManager = checkIfUserIsManager(userDetails);
 
-      return CustomJwtToken.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+      return CustomJwtToken.builder()
+        .accessToken(accessToken)
+        .refreshToken(refreshToken)
+        .hasDeletePermission(isManager)
+        .build();
 
     } catch (IOException e) {
       throw new BadRequestException("Token could not be parsed");
@@ -84,5 +94,11 @@ public class UserService {
       userRepository.save(newUser);
     }
     return userDetailsService.loadUserByUsername(email);
+  }
+
+  private boolean checkIfUserIsManager(UserDetails userDetails) {
+
+    return userDetails.getAuthorities().stream()
+      .anyMatch(auth -> Role.WAREHOUSE_MANAGER.getName().equals(auth.getAuthority()));
   }
 }

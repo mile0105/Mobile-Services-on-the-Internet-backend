@@ -9,5 +9,6 @@ public class CustomJwtToken {
 
   private String accessToken;
   private String refreshToken;
+  private boolean hasDeletePermission;
 
 }

@@ -49,16 +49,6 @@ public class JwtUtils {
     return claims.getSubject();
   }
 
-
-  public Claims getAllClaimsFromToken(String token) {
-    return Jwts
-      .parserBuilder()
-      .setSigningKey(keygen())
-      .build()
-      .parseClaimsJws(token)
-      .getBody();
-  }
-
   public String generateAccessToken(Authentication authentication) {
 
     Instant now = Instant.now();
@@ -100,6 +90,16 @@ public class JwtUtils {
       .setExpiration(Date.from(Instant.now().plusSeconds(accessTokenValiditySeconds)))
       .signWith(keygen())
       .compact();
+  }
+
+
+  private Claims getAllClaimsFromToken(String token) {
+    return Jwts
+      .parserBuilder()
+      .setSigningKey(keygen())
+      .build()
+      .parseClaimsJws(token)
+      .getBody();
   }
 
   public String generateRefreshToken(UserDetails userDetails) {
