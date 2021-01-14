@@ -27,7 +27,6 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final WarehouseProductRepository warehouseProductRepository;
 
-  private final int STARTING_QUANTITY = 0;
   private final long DEFAULT_WAREHOUSE_ID = 1L;
 
   public List<ProductResponse> listAllProducts() {
@@ -49,19 +48,18 @@ public class ProductService {
     Product oldProduct = findByIdOrThrow(productId);
 
     int quantityValue = quantity.intValue();
+    int newQuantity = productMapper.getProductQuantity(oldProduct) + quantityValue;
 
     if (quantityValue >= 0) {
-      warehouseProductRepository.updateProductQuantity(productId, quantityValue, DEFAULT_WAREHOUSE_ID);
+      warehouseProductRepository.updateProductQuantity(productId, DEFAULT_WAREHOUSE_ID, newQuantity);
       return;
     }
 
-    int newQuantity = productMapper.getProductQuantity(oldProduct) + quantityValue;
     if (newQuantity < 0) {
       throw new BadRequestException("Quantity must not be less than 0");
     }
 
     long quantityCopy = -quantity;
-
 
     LinkedHashSet<WarehouseProduct> quantitiesInReversedOrder = oldProduct.getQuantitiesPerWarehouse().stream()
       .sorted(Comparator.comparingLong(WarehouseProduct::getWarehouseId).reversed())
@@ -75,10 +73,10 @@ public class ProductService {
 
       if (quantityCopy > currentQuantity) {
         quantityCopy -= currentQuantity;
-        warehouseProductRepository.updateProductQuantity(currentProductId, 0, currentWarehouseId);
+        warehouseProductRepository.updateProductQuantity(currentProductId, currentWarehouseId, 0);
       } else {
-        warehouseProductRepository.updateProductQuantity(currentProductId, (int) (currentQuantity - quantityCopy),
-          currentWarehouseId);
+        warehouseProductRepository.updateProductQuantity(currentProductId, currentWarehouseId,
+          (int)(currentQuantity - quantityCopy));
         return;
       }
     }
@@ -107,7 +105,7 @@ public class ProductService {
     productRepository.deleteById(productId);
   }
 
-  private Product findByIdOrThrow(long productId) {
+  public Product findByIdOrThrow(long productId) {
     return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
   }
 }

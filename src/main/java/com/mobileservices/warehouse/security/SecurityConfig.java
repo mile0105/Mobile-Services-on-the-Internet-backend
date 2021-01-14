@@ -58,8 +58,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .addFilterBefore(new JwtTokenAuthenticationFilter(userDetailsService, jwtUtils), UsernamePasswordAuthenticationFilter.class)
       .authorizeRequests()
       .antMatchers("/api/v1/users/register**", "/api/v1/users/register/google**", "/api/v1/users/login**").permitAll()
+      .antMatchers("/api/v2/**").permitAll()
+      .antMatchers("/api/v1/**").permitAll()
       .antMatchers("/oauth2/**").permitAll()
-      .antMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasAuthority(Role.WAREHOUSE_MANAGER.getName())
+//      .antMatchers(HttpMethod.DELETE, "/api/v1/products/**").hasAuthority(Role.WAREHOUSE_MANAGER.getName())
       .anyRequest().authenticated();
   }
 

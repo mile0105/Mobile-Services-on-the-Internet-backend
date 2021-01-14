@@ -1,13 +1,15 @@
 package com.mobileservices.warehouse.product.v2;
 
-import com.mobileservices.warehouse.product.v1.model.Product;
 import com.mobileservices.warehouse.product.v2.model.Warehouse;
+import com.mobileservices.warehouse.product.v2.model.WarehouseResponse;
 import com.mobileservices.warehouse.product.v2.service.WarehouseService;
-import lombok.Getter;
+import com.mobileservices.warehouse.util.models.EmptyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,39 +23,20 @@ public class WarehouseController {
   private final WarehouseService warehouseService;
 
   @GetMapping("/{id}")
-  public ResponseEntity<Warehouse> getWarehouse(@PathVariable("id") long warehouseId) {
-    Warehouse warehouse = warehouseService.getWarehouse(warehouseId);
-    return ResponseEntity.ok(warehouse);
+  public ResponseEntity<WarehouseResponse> getWarehouse(@PathVariable("id") long warehouseId) {
+    return ResponseEntity.ok(warehouseService.getWarehouse(warehouseId));
   }
 
   @GetMapping
-  public ResponseEntity<List<Warehouse>> getAllWarehouses() {
+  public ResponseEntity<List<WarehouseResponse>> getAllWarehouses() {
     return ResponseEntity.ok(warehouseService.getWarehouses());
   }
 
-  /*
-  @PostMapping
-  public ResponseEntity<Product> addProduct(@RequestBody ProductApi productApi) {
-    final Product product = productV2Service.addProduct(productApi);
-    return ResponseEntity.ok(product);
-  }
-
-  @PatchMapping(value = "/{id}/quantity")
-  public ResponseEntity<EmptyResponse> changeQuantity(@PathVariable("id") long productId, @RequestBody Long quantity) {
-    productV2Service.changeQuantity(quantity, productId);
+  @PatchMapping(value = "/{warehouseId}/products/{productId}/quantity")
+  public ResponseEntity<EmptyResponse> changeQuantity(@PathVariable("warehouseId") long warehouseId,
+                                                      @PathVariable("productId") long productId,
+                                                      @RequestBody Long quantity) {
+    warehouseService.updateQuantity(warehouseId, productId, quantity);
     return ResponseEntity.ok(new EmptyResponse());
   }
-
-  @DeleteMapping("/{id}")
-  @PreAuthorize("hasAuthority('MANAGER')")
-  public ResponseEntity<EmptyResponse> deleteProduct(@PathVariable("id") long productId) {
-    productV2Service.deleteProduct(productId);
-    return ResponseEntity.ok(new EmptyResponse());
-  }
-
-  @PutMapping("/{id}")
-  public ResponseEntity<Product> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApi editedProduct) {
-    Product product = productV2Service.editProduct(productId, editedProduct);
-    return ResponseEntity.ok(product);
-  }*/
 }

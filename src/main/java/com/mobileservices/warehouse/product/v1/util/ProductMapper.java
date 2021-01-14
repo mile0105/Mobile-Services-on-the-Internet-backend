@@ -56,13 +56,16 @@ public class ProductMapper {
   }
 
   public ProductResponse mapToProductResponse(Product product) {
+    return mapToProductResponse(product, getProductQuantity(product));
+  }
+
+  public ProductResponse mapToProductResponse(Product product, Integer warehouseQuantity) {
     return ProductResponse.builder()
       .id(product.getId())
       .manufacturerName(product.getManufacturerName())
       .modelName(product.getModelName())
       .price(product.getPrice())
-      .quantity(getProductQuantity(product))
-
+      .quantity(warehouseQuantity)
       .build();
   }
 

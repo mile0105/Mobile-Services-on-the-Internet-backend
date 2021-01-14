@@ -9,7 +9,7 @@ import java.util.Set;
 @Getter
 @Builder
 public class WarehouseResponse {
-  private int id;
+  private Long id;
   private String name;
   private Set<ProductResponse> products;
 }
