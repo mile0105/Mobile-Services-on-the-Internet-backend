@@ -1,7 +1,7 @@
-package com.mobileservices.warehouse.product.repository;
+package com.mobileservices.warehouse.product.v1.repository;
 
 
-import com.mobileservices.warehouse.product.model.Product;
+import com.mobileservices.warehouse.product.v1.model.Product;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;

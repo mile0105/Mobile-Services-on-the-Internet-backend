@@ -1,4 +1,4 @@
-package com.mobileservices.warehouse.product.model;
+package com.mobileservices.warehouse.product.v1.model;
 
 import lombok.Builder;
 import lombok.Getter;

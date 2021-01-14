@@ -1,5 +1,6 @@
-package com.mobileservices.warehouse.product.model;
+package com.mobileservices.warehouse.product.v1.model;
 
+import com.mobileservices.warehouse.product.v2.model.WarehouseProduct;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.Id;
@@ -7,6 +8,7 @@ import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Builder
@@ -20,8 +22,8 @@ public class Product {
   private String modelName;
   @Column("price")
   private Double price;
-  @Column("quantity")
-  private Integer quantity;
   @Column("last_updated")
   private LocalDateTime lastUpdated;
+  @Column("product_id")
+  private Set<WarehouseProduct> quantitiesPerWarehouse;
 }

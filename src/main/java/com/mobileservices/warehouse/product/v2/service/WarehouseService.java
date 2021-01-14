@@ -1,11 +1,14 @@
-package com.mobileservices.warehouse.product.service;
+package com.mobileservices.warehouse.product.v2.service;
 
 import com.mobileservices.warehouse.error.exceptions.BadRequestException;
 import com.mobileservices.warehouse.error.exceptions.NotFoundException;
-import com.mobileservices.warehouse.product.model.Product;
-import com.mobileservices.warehouse.product.model.ProductApi;
-import com.mobileservices.warehouse.product.repository.ProductRepository;
-import com.mobileservices.warehouse.product.util.ProductMapper;
+import com.mobileservices.warehouse.product.v1.model.Product;
+import com.mobileservices.warehouse.product.v1.model.ProductApi;
+import com.mobileservices.warehouse.product.v1.repository.ProductRepository;
+import com.mobileservices.warehouse.product.v1.service.ProductService;
+import com.mobileservices.warehouse.product.v2.model.Warehouse;
+import com.mobileservices.warehouse.product.v2.model.WarehouseResponse;
+import com.mobileservices.warehouse.product.v2.repository.WarehouseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,20 +18,21 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+public class WarehouseService {
 
-  private final ProductMapper productMapper;
-  private final ProductRepository productRepository;
+  private final WarehouseRepository warehouseRepository;
+  private final ProductService productService;
 
-  private final int STARTING_QUANTITY = 0;
-
-  public List<Product> listAllProducts() {
-
-    List<Product> products = new ArrayList<>();
-    productRepository.findAll().forEach(products::add);
-    return products;
+  public Warehouse getWarehouse(Long warehouseId) {
+    return findByIdOrThrow(warehouseId);
   }
 
+  public List<Warehouse> getWarehouses() {
+    List<Warehouse> warehouses = new ArrayList<>();
+    warehouseRepository.findAll().forEach(warehouses::add);
+    return warehouses;
+  }
+/*
   public Product addProduct(ProductApi productApi) {
     Product convertedProduct = productMapper.mapToDbModel(productApi, null, STARTING_QUANTITY);
 
@@ -69,8 +73,8 @@ public class ProductService {
 
     productRepository.deleteById(productId);
   }
-
-  private Product findByIdOrThrow(long productId) {
-    return productRepository.findById(productId).orElseThrow(() -> new NotFoundException("Product not found"));
+*/
+  private Warehouse findByIdOrThrow(long warehouseId) {
+    return warehouseRepository.findById(warehouseId).orElseThrow(() -> new NotFoundException("Warehouse not found"));
   }
 }

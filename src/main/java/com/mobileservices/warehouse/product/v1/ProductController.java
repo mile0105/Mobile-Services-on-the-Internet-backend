@@ -1,8 +1,9 @@
-package com.mobileservices.warehouse.product;
+package com.mobileservices.warehouse.product.v1;
 
-import com.mobileservices.warehouse.product.model.Product;
-import com.mobileservices.warehouse.product.model.ProductApi;
-import com.mobileservices.warehouse.product.service.ProductService;
+import com.mobileservices.warehouse.product.v1.model.Product;
+import com.mobileservices.warehouse.product.v1.model.ProductApi;
+import com.mobileservices.warehouse.product.v1.model.ProductResponse;
+import com.mobileservices.warehouse.product.v1.service.ProductService;
 import com.mobileservices.warehouse.util.models.EmptyResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +28,13 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping
-  public ResponseEntity<List<Product>> getAllProducts() {
-    final List<Product> products = productService.listAllProducts();
-    return ResponseEntity.ok(products);
+  public ResponseEntity<List<ProductResponse>> getAllProducts() {
+    return ResponseEntity.ok(productService.listAllProducts());
   }
 
   @PostMapping
-  public ResponseEntity<Product> addProduct(@RequestBody ProductApi productApi) {
-    final Product product = productService.addProduct(productApi);
-    return ResponseEntity.ok(product);
+  public ResponseEntity<ProductResponse> addProduct(@RequestBody ProductApi productApi) {
+    return ResponseEntity.ok(productService.addProduct(productApi));
   }
 
   @PatchMapping(value = "/{id}/quantity")
@@ -52,8 +51,7 @@ public class ProductController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Product> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApi editedProduct) {
-    Product product = productService.editProduct(productId, editedProduct);
-    return ResponseEntity.ok(product);
+  public ResponseEntity<ProductResponse> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApi editedProduct) {
+    return ResponseEntity.ok(productService.editProduct(productId, editedProduct));
   }
 }
