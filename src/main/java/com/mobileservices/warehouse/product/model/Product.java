@@ -24,4 +24,6 @@ public class Product {
   private Integer quantity;
   @Column("last_updated")
   private LocalDateTime lastUpdated;
+  @Column("price_in_naira")
+  private Double priceInNaira;
 }

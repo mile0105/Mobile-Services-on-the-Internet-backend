@@ -1,7 +1,8 @@
 package com.mobileservices.warehouse.product;
 
 import com.mobileservices.warehouse.product.model.Product;
-import com.mobileservices.warehouse.product.model.ProductApi;
+import com.mobileservices.warehouse.product.model.ProductApiV1;
+import com.mobileservices.warehouse.product.model.ProductResponseV1;
 import com.mobileservices.warehouse.product.service.ProductService;
 import com.mobileservices.warehouse.util.models.EmptyResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +28,14 @@ public class ProductController {
   private final ProductService productService;
 
   @GetMapping
-  public ResponseEntity<List<Product>> getAllProducts() {
-    final List<Product> products = productService.listAllProducts();
+  public ResponseEntity<List<ProductResponseV1>> getAllProducts() {
+    final List<ProductResponseV1> products = productService.listAllProducts();
     return ResponseEntity.ok(products);
   }
 
   @PostMapping
-  public ResponseEntity<Product> addProduct(@RequestBody ProductApi productApi) {
-    final Product product = productService.addProduct(productApi);
+  public ResponseEntity<ProductResponseV1> addProduct(@RequestBody ProductApiV1 productApi) {
+    final ProductResponseV1 product = productService.addProduct(productApi);
     return ResponseEntity.ok(product);
   }
 
@@ -52,8 +53,8 @@ public class ProductController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Product> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApi editedProduct) {
-    Product product = productService.editProduct(productId, editedProduct);
+  public ResponseEntity<ProductResponseV1> editProduct(@PathVariable("id") Long productId, @RequestBody ProductApiV1 editedProduct) {
+    ProductResponseV1 product = productService.editProduct(productId, editedProduct);
     return ResponseEntity.ok(product);
   }
 }

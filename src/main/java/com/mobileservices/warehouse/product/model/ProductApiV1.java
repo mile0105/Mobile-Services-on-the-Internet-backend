@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class ProductApi {
+public class ProductApiV1 {
   private String manufacturerName;
   private String modelName;
-  private double price;
+  private Double price;
   private LocalDateTime lastEditTimeStamp;
 }
