@@ -11,6 +11,6 @@ public class ProductApiV2 {
   private String manufacturerName;
   private String modelName;
   private Double price;
-  private Double priceInNaira;
+  private Double priceInEur;
   private LocalDateTime lastEditTimeStamp;
 }

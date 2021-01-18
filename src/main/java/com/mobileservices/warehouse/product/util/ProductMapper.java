@@ -9,18 +9,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductMapper {
 
-  private final double dollarToNaira = 381.20;
+  private final double dollarToEur = 0.83;
 
   public Product mapToDbModel(ProductApiV2 productApiV2, Long id, Integer quantity) {
 
-    double priceInDollars = productApiV2.getPrice() == null ? productApiV2.getPriceInNaira()/dollarToNaira : productApiV2.getPrice();
-    double priceInNaira = productApiV2.getPriceInNaira() == null? productApiV2.getPrice() * dollarToNaira: productApiV2.getPriceInNaira();
+    double priceInDollars = productApiV2.getPrice() == null ? productApiV2.getPriceInEur() / dollarToEur : productApiV2.getPrice();
+    double priceInNaira = productApiV2.getPriceInEur() == null ? productApiV2.getPrice() * dollarToEur : productApiV2.getPriceInEur();
 
     return Product.builder()
       .manufacturerName(productApiV2.getManufacturerName())
       .modelName(productApiV2.getModelName())
       .price(priceInDollars)
-      .priceInNaira(priceInNaira)
+      .priceInEur(priceInNaira)
       .quantity(quantity)
       .id(id)
       .build();
@@ -31,7 +31,7 @@ public class ProductMapper {
       .manufacturerName(productApiV1.getManufacturerName())
       .modelName(productApiV1.getModelName())
       .price(productApiV1.getPrice())
-      .priceInNaira(productApiV1.getPrice() * dollarToNaira)
+      .priceInEur(productApiV1.getPrice() * dollarToEur)
       .quantity(quantity)
       .id(id)
       .build();
@@ -53,7 +53,7 @@ public class ProductMapper {
       .manufacturerName(other.getManufacturerName())
       .modelName(other.getModelName())
       .price(other.getPrice())
-      .priceInNaira(other.getPriceInNaira())
+      .priceInEur(other.getPriceInEur())
       .quantity(other.getQuantity())
       .build();
   }
