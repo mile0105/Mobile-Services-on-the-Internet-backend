@@ -13,14 +13,11 @@ public class ProductMapper {
 
   public Product mapToDbModel(ProductApiV2 productApiV2, Long id, Integer quantity) {
 
-    double priceInDollars = productApiV2.getPrice() == null ? productApiV2.getPriceInEur() / dollarToEur : productApiV2.getPrice();
-    double priceInNaira = productApiV2.getPriceInEur() == null ? productApiV2.getPrice() * dollarToEur : productApiV2.getPriceInEur();
-
     return Product.builder()
       .manufacturerName(productApiV2.getManufacturerName())
       .modelName(productApiV2.getModelName())
-      .price(priceInDollars)
-      .priceInEur(priceInNaira)
+      .price(productApiV2.getPrice())
+      .priceInEur(productApiV2.getPriceInEur())
       .quantity(quantity)
       .id(id)
       .build();
